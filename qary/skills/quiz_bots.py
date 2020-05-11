@@ -33,12 +33,7 @@ class Bot:
         self.vector['definition'] = quizzes.term_vector_dict(self.glossary.values(), self.glossary.keys())
 
         self.synonyms = {term: term for term in self.glossary}
-        # create reverse index of synonyms to canonical terms
-        # for term, d in self.glossary.items():
-        #     self.synonyms.update(dict(zip(capitalizations(term), [term] * 4)))
-        #     acro = d['acronym']
-        #     if acro:
-        #         self.synonyms.update(dict(zip(capitalizations(acro), [term] * 4)))
+        
 
     def reply(self, statement):
         """ Suggest responses to a user statement string with [(score, reply_string)..]"""
