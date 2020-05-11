@@ -3,7 +3,7 @@ import logging
 
 # import pandas as pd
 
-from ..etl import glossaries
+from ..etl import quizzes
 from .. import spacy_language_model
 from ..etl import knowledge_extraction as extract
 
@@ -16,25 +16,21 @@ def capitalizations(s):
 
 
 class Bot:
-    """ Bot that can reply with definitions from glossary yml files in data/faq/glossary-*.yml
+    """ Bot that can ask questions and indicate whether user answered is correct
 
     >>> bot = Bot()
-    >>> bot.reply('allele')
-    [(0.05, "I don't understand...")]
-    >>> bot.reply('What is an Allele?')
-    [(1.0, 'A variant form of a given gene...')]
-    >>> bot.reply('What is a nucleotide?')
-    [(0.94, 'The basic building blocks of DNA and RNA...')]
+    >>> bot.prompt("What is your name?")
+    'What is your name?'
     """
 
-    def __init__(self, domains=('dsdh',)):
+    def __init__(self):
         """ Load glossary from yaml file indicated by list of domain names """
         global nlp
         self.nlp = nlp
-        self.glossary = glossaries.load(domains=domains)['cleaned']
+        self.qa = quizzes.load("qa-data-science.yml")
         self.vector = dict()
-        self.vector['term'] = glossaries.term_vector_dict(self.glossary.keys())
-        self.vector['definition'] = glossaries.term_vector_dict(self.glossary.values(), self.glossary.keys())
+        self.vector['term'] = quizzes.term_vector_dict(self.glossary.keys())
+        self.vector['definition'] = quizzes.term_vector_dict(self.glossary.values(), self.glossary.keys())
 
         self.synonyms = {term: term for term in self.glossary}
         # create reverse index of synonyms to canonical terms
